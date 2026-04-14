@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mulah - Registration</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --mulah-orange: #f27c22;
+            --mulah-dark-grey: #5F5B5B;
+            --mulah-light-grey: #a9a9a9;
+            --mulah-blue: #3A5A98;
+            --mulah-red: #d9534f;
+        }
+
+        body {
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .mobile-frame {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            height: 100vh;
+            max-height: 800px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .logo-container {
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+
+        .logo-container h1 {
+            color: var(--mulah-orange);
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .content-body {
+            flex-grow: 1;
+            padding: 0 35px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-family: 'Lora', serif;
+            color: var(--mulah-dark-grey);
+            font-size: 36px;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: var(--mulah-dark-grey);
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .birthday-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .birthday-group input {
+            text-align: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input {
+            margin-right: 8px;
+            accent-color: var(--mulah-orange);
+        }
+
+        .btn-primary-custom {
+            background-color: var(--mulah-orange);
+            color: white;
+            border-radius: 50px;
+            padding: 14px;
+            width: 100%;
+            border: none;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+
+        .error {
+            color: var(--mulah-red);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .footer {
+            text-align: center;
+            padding: 25px 0;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: var(--mulah-light-grey);
+        }
+
+        .footer span {
+            color: var(--mulah-blue);
+            font-weight: 600;
+        }
+        .footer-link {
+            color: var(--mulah-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="mobile-frame">
+
+    <div class="logo-container">
+        <h1>MULAH</h1>
+    </div>
+
+    <div class="content-body">
+
+        <h2 class="page-title">Registration</h2>
+        <div class="page-subtitle">Please fill up your details.</div>
+
+        <form id="registrationForm">
+
+            <!-- NAME -->
+            <div class="form-group">
+                <input type="text" id="name" class="form-control" placeholder="Enter Name">
+                <div class="error" id="nameErr">Name is required</div>
+            </div>
+
+            <!-- BIRTHDAY -->
+            <div class="form-group">
+                <div class="birthday-group">
+                    <input type="text" id="dd" class="form-control" placeholder="DD" maxlength="2" inputmode="numeric">
+                    <input type="text" id="mm" class="form-control" placeholder="MM" maxlength="2" inputmode="numeric">
+                    <input type="text" id="yyyy" class="form-control" placeholder="YYYY" maxlength="4" inputmode="numeric">
+                </div>
+                <div class="error" id="dobErr">Invalid birthday</div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-group">
+                <input type="email" id="email" class="form-control" placeholder="Email Address">
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="noEmail">
+                    <label>No email address</label>
+                </div>
+
+                <div class="error" id="emailErr">Email required or tick checkbox</div>
+            </div>
+
+            <button type="submit" class="btn-primary-custom">Continue</button>
+
+        </form>
+
+    </div>
+    <div class="footer">
+            Powered by 
+            <a href="https://www.mulahrewards.com/" target="_blank" style="color: inherit; font-weight: 600; text-decoration: none;">
+                <span>MulahRewards.com</span>
+            </a>
+        </div>
+</div>
+
+<script>
+
+function pad2(value) {
+    if (!value) return "";
+    return value.toString().padStart(2, "0");
+}
+
+// numeric only + restrict
+["dd","mm","yyyy"].forEach(id => {
+    const el = document.getElementById(id);
+
+    el.addEventListener("input", function () {
+        this.value = this.value.replace(/[^0-9]/g, "");
+    });
+
+    // auto pad when leaving field
+    el.addEventListener("blur", function () {
+        if (id !== "yyyy" && this.value.length === 1) {
+            this.value = pad2(this.value);
+        }
+    });
+});
+
+// email toggle
+const emailInput = document.getElementById("email");
+const noEmail = document.getElementById("noEmail");
+
+noEmail.addEventListener("change", function () {
+    emailInput.disabled = this.checked;
+    if (this.checked) emailInput.value = "";
+});
+
+// submit
+document.getElementById("registrationForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const dd = document.getElementById("dd").value;
+    const mm = document.getElementById("mm").value;
+    const yyyy = document.getElementById("yyyy").value;
+    const email = emailInput.value.trim();
+
+    // reset errors
+    document.querySelectorAll(".error").forEach(el => el.style.display = "none");
+
+    let valid = true;
+
+    // name check
+    if (!name) {
+        document.getElementById("nameErr").style.display = "block";
+        valid = false;
+    }
+
+    // birthday check
+    if (dd.length === 0 || mm.length === 0 || yyyy.length !== 4) {
+        document.getElementById("dobErr").style.display = "block";
+        valid = false;
+    }
+
+    // email check
+    if (!noEmail.checked && !email) {
+        document.getElementById("emailErr").style.display = "block";
+        valid = false;
+    }
+
+    if (!valid) return;
+
+    const ddFinal = pad2(dd);
+    const mmFinal = pad2(mm);
+
+    sessionStorage.setItem("mulah_name", name);
+    sessionStorage.setItem("mulah_birthday", `${ddFinal}/${mmFinal}/${yyyy}`);
+    sessionStorage.setItem("mulah_email", noEmail.checked ? "No email provided" : email);
+
+    window.location.href = "summaryPage.html";
+});
+
+</script>
+
+</body>
+</html>

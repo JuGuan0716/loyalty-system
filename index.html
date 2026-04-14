@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mulah - Check Loyalty Points</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --mulah-orange: #f27c22;
+            --mulah-dark-grey: #5F5B5B;
+            --mulah-light-grey: #a9a9a9;
+            --mulah-blue: #3A5A98;
+        }
+
+        body {
+            background-color: #e9ecef; /* Darker background to highlight the mobile frame */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Mobile Viewport Container */
+        .mobile-frame {
+            width: 100%;
+            max-width: 400px; 
+            background-color: #ffffff;
+            height: 100vh;
+            max-height: 800px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        /* Header Logo */
+        .logo-container {
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 30px;
+        }
+        .logo-container h1 {
+            color: var(--mulah-orange);
+            font-weight: 800;
+            font-size: 28px;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .content-body {
+            flex-grow: 1;
+            padding: 0 35px;
+        }
+
+        .greeting {
+            font-family: 'Lora', serif;
+            color: var(--mulah-dark-grey);
+            font-size: 46px;
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+
+        .sub-greeting {
+            color: var(--mulah-orange);
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 50px;
+        }
+
+        /* Custom Input Styling */
+        .input-row {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .country-code-wrap {
+            border-bottom: 2px solid var(--mulah-orange);
+            padding-bottom: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            color: var(--mulah-dark-grey);
+            font-weight: 600;
+            width: 65px;
+            justify-content: space-between;
+        }
+
+        .country-code-wrap i {
+            font-size: 12px;
+        }
+
+        .phone-input-wrap {
+            flex-grow: 1;
+            position: relative;
+            border-bottom: 2px solid var(--mulah-orange);
+        }
+
+        .phone-input {
+            width: 100%;
+            border: none;
+            padding-bottom: 8px;
+            padding-right: 30px; /* Space for icon */
+            font-size: 16px;
+            color: var(--mulah-dark-grey);
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            background: transparent;
+        }
+
+        .phone-input::placeholder {
+            color: var(--mulah-light-grey);
+            font-weight: 500;
+        }
+
+        .check-icon {
+            position: absolute;
+            right: 0;
+            bottom: 8px;
+            color: #d3d3d3;
+            font-size: 20px;
+        }
+
+        /* Valid State Icon */
+        .check-icon.valid {
+            color: var(--mulah-orange); /* Or keep it grey based on preference, design shows grey */
+        }
+
+        /* Button Styling */
+        .btn-primary-custom {
+            background-color: var(--mulah-orange);
+            color: white;
+            border-radius: 50px;
+            padding: 14px;
+            font-weight: 600;
+            width: 100%;
+            border: none;
+            font-size: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary-custom:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px 0;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: var(--mulah-light-grey);
+        }
+
+        .footer span {
+            color: var(--mulah-blue);
+            font-weight: 600;
+        }
+
+        .input-group-wrapper {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+        }
+        .input-row {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* COUNTRY CODE (LINE STYLE) */
+        .country-select {
+            border: none;
+            border-bottom: 2px solid var(--mulah-orange);
+            background: transparent;
+            font-weight: 600;
+            color: var(--mulah-dark-grey);
+            padding-bottom: 6px;
+            outline: none;
+            width: 70px;
+        }
+
+        /* PHONE INPUT (LINE STYLE) */
+        #phoneNumber {
+            flex: 1;
+            border: none;
+            border-bottom: 2px solid var(--mulah-orange);
+            padding-bottom: 6px;
+            outline: none;
+            font-size: 15px;
+            background: transparent;
+        }
+
+        /* ICON */
+        #statusIcon {
+            font-size: 18px;
+            color: #ccc;
+            margin-bottom: 6px;
+        }
+
+        #statusIcon.valid {
+            color: var(--mulah-orange);
+        }
+        
+        .error-msg {
+            grid-column: 2;
+            font-size: 12.5px;
+            color: red;
+            margin-top: 2px;
+            line-height: 1.2;
+        }
+        .footer-link {
+            color: var(--mulah-blue);
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        <div class="logo-container">
+            <h1>MULAH</h1>
+        </div>
+
+        <div class="content-body">
+            <h2 class="greeting">Hello,<br>Welcome !</h2>
+            <div class="sub-greeting">Check Your Loyalty Points & Rewards</div>
+
+            <form id="loyaltyForm">
+                <div class="input-group-wrapper">
+                    <div class="input-row">
+
+                        <!-- Country Code -->
+                        <select id="countryCode" class="country-select">
+                            <option value="+60">+60</option>
+                            <option value="+65">+65</option>
+                            <option value="+1">+1</option>
+                        </select>
+
+                        <!-- Phone Input -->
+                        <input type="text"
+                            id="phoneNumber"
+                            placeholder="Enter mobile number"
+                            autocomplete="off">
+
+                        <!-- Icon -->
+                        <i class="bi bi-check-circle-fill" id="statusIcon"></i>
+
+                    </div>
+                    <div id="errorMsg" class="error-msg"></div>
+                </div>
+                <button type="submit" class="btn-primary-custom">Check Loyalty Points</button>
+            </form>
+        </div>
+
+        <div class="footer">
+            Powered by 
+            <a href="https://www.mulahrewards.com/" target="_blank" style="color: inherit; font-weight: 600; text-decoration: none;">
+                <span>MulahRewards.com</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById("phoneNumber");
+        const form = document.getElementById("loyaltyForm");
+        const statusIcon = document.getElementById("statusIcon");
+        const countryCode = document.getElementById("countryCode");
+        const errorMsg = document.getElementById("errorMsg");
+
+        // allow digits only
+        phoneInput.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "");
+
+            errorMsg.textContent = ""; // clear error while typing
+
+            if (this.value.length >= 8 && this.value.length <= 11) {
+                statusIcon.classList.add("valid");
+            } else {
+                statusIcon.classList.remove("valid");
+            }
+        });
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const number = phoneInput.value;
+            const code = countryCode.value;
+
+            // reset error
+            errorMsg.textContent = "";
+
+            if (!number) {
+                errorMsg.textContent = "Please enter your mobile number";
+                return;
+            }
+
+            if (number.length < 8 || number.length > 11) {
+                errorMsg.textContent = "Invalid mobile number format";
+                return;
+            }
+
+            const fullNumber = code + number;
+
+            const validNumbers = [
+                "+60173527250",
+                "+65173527250"
+            ];
+
+            if (validNumbers.includes(fullNumber)) {
+
+                sessionStorage.setItem("phone", fullNumber);
+                window.location.href = "registerPage.html";
+
+            } else {
+                errorMsg.textContent = "Invalid number. Please use registered number.";
+            }
+        });
+    </script>
+</body>
+</html>
