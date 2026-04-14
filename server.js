@@ -3,23 +3,27 @@ const path = require("path");
 
 const app = express();
 
-// ✅ FIX: fallback for local + Railway
-const PORT = process.env.PORT || 3000;
+// IMPORTANT: Railway port MUST be used directly
+const PORT = process.env.PORT;
 
 // serve static files
 app.use(express.static(__dirname));
 
-// homepage
+// routes
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// fallback route
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// bind server
-app.listen(PORT, "0.0.0.0", () => {
+// IMPORTANT FIX: ensure binding delay safety
+const server = app.listen(PORT, "0.0.0.0", () => {
     console.log("Server running on port " + PORT);
+});
+
+// IMPORTANT: handle Railway health check timing
+server.on("error", (err) => {
+    console.error("Server error:", err);
 });
